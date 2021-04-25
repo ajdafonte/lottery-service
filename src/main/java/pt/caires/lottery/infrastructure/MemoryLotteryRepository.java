@@ -2,11 +2,13 @@ package pt.caires.lottery.infrastructure;
 
 import pt.caires.lottery.domain.Lottery;
 import pt.caires.lottery.domain.LotteryRepository;
+import pt.caires.lottery.domain.exception.ConflictServiceException;
 import pt.caires.lottery.infrastructure.entity.LotteryEntity;
 import pt.caires.lottery.infrastructure.mapper.LotteryEntityToLotteryMapper;
 import pt.caires.lottery.infrastructure.mapper.LotteryToLotteryEntityMapper;
 
 import javax.inject.Named;
+import java.util.function.Function;
 
 @Named
 public class MemoryLotteryRepository implements LotteryRepository {
@@ -29,7 +31,15 @@ public class MemoryLotteryRepository implements LotteryRepository {
 
         wrapperStorageLottery.insert(lotteryEntity);
 
-        return chargingSessionEntityToLotteryMapper.map(wrapperStorageLottery.selectBy(lottery.getId()));
+        Lottery savedLottery = wrapperStorageLottery.selectBy(lottery.getId())
+                .map(toLottery())
+                .orElseThrow(() -> new ConflictServiceException("A conflict has occurred when saving the Lottery"));
+
+        return savedLottery;
+    }
+
+    private Function<LotteryEntity, Lottery> toLottery() {
+        return chargingSessionEntityToLotteryMapper::map;
     }
 
 }

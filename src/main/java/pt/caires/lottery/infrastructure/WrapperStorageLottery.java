@@ -5,6 +5,7 @@ import pt.caires.lottery.infrastructure.entity.LotteryEntity;
 import javax.inject.Named;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
@@ -23,8 +24,8 @@ public class WrapperStorageLottery {
         LOTTERY_STORAGE.put(lotteryEntity.getId(), lotteryEntity);
     }
 
-    public LotteryEntity selectBy(String id) {
-        return LOTTERY_STORAGE.get(id);
+    public Optional<LotteryEntity> selectBy(String id) {
+        return Optional.ofNullable(LOTTERY_STORAGE.get(id));
     }
 
     public Collection<LotteryEntity> selectAllBy(LocalDate date) {

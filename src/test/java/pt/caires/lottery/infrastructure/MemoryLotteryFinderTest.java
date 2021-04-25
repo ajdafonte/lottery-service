@@ -12,6 +12,7 @@ import pt.caires.lottery.infrastructure.mapper.LotteryEntityToLotteryMapper;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -62,6 +63,18 @@ class MemoryLotteryFinderTest {
         assertThat(result)
                 .isNotEmpty()
                 .containsExactly(anExpectedLottery());
+    }
+
+    @Test
+    void should_find_lottery_by_id() {
+        given(wrapperStorageLottery.selectBy(ID)).willReturn(Optional.of(LOTTERY_ENTITY));
+        given(lotteryEntityToLotteryMapper.map(LOTTERY_ENTITY)).willReturn(LOTTERY);
+
+        Optional<Lottery> result = memoryLotteryFinder.findBy(ID);
+
+        assertThat(result)
+                .isPresent()
+                .hasValue(anExpectedLottery());
     }
 
     private Lottery anExpectedLottery() {

@@ -6,14 +6,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pt.caires.lottery.domain.Lottery;
+import pt.caires.lottery.domain.exception.ConflictServiceException;
 import pt.caires.lottery.infrastructure.entity.LotteryEntity;
 import pt.caires.lottery.infrastructure.mapper.LotteryEntityToLotteryMapper;
 import pt.caires.lottery.infrastructure.mapper.LotteryToLotteryEntityMapper;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -48,7 +51,7 @@ class MemoryLotteryRepositoryTest {
         Lottery lottery = new Lottery(ID, NAME, DATE, FINISHED, TICKETS);
         LotteryEntity lotteryEntity = new LotteryEntity(ID, NAME, DATE, FINISHED, TICKETS);
         given(lotteryToLotteryEntityMapper.map(lottery)).willReturn(lotteryEntity);
-        given(wrapperStorageLottery.selectBy(ID)).willReturn(lotteryEntity);
+        given(wrapperStorageLottery.selectBy(ID)).willReturn(Optional.of(lotteryEntity));
         given(lotteryEntityToLotteryMapper.map(lotteryEntity)).willReturn(lottery);
 
         Lottery result = memoryLotteryRepository.save(lottery);
@@ -56,6 +59,22 @@ class MemoryLotteryRepositoryTest {
         assertThat(result)
                 .isNotNull()
                 .isEqualTo(anExpectedLottery());
+        verify(wrapperStorageLottery).insert(lotteryEntity);
+    }
+
+    @Test
+    void should_fail_to_save_a_lottery() {
+        Lottery lottery = new Lottery(ID, NAME, DATE, FINISHED, TICKETS);
+        LotteryEntity lotteryEntity = new LotteryEntity(ID, NAME, DATE, FINISHED, TICKETS);
+        given(lotteryToLotteryEntityMapper.map(lottery)).willReturn(lotteryEntity);
+        given(wrapperStorageLottery.selectBy(ID)).willReturn(Optional.empty());
+
+        Throwable throwable = catchThrowable(() -> memoryLotteryRepository.save(lottery));
+
+        assertThat(throwable)
+                .isNotNull()
+                .isInstanceOf(ConflictServiceException.class)
+                .hasMessage("A conflict has occurred when saving the Lottery");
         verify(wrapperStorageLottery).insert(lotteryEntity);
     }
 

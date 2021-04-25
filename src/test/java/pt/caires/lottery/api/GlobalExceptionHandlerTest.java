@@ -5,11 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pt.caires.lottery.domain.exception.ConflictServiceException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
+import static java.net.HttpURLConnection.HTTP_CONFLICT;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +34,15 @@ class GlobalExceptionHandlerTest {
         globalExceptionHandler.handleIllegalArgumentException(exception, response);
 
         verify(response).sendError(HTTP_BAD_REQUEST, exception.getMessage());
+    }
+
+    @Test
+    void should_handle_conflict_service_exception() throws IOException {
+        ConflictServiceException exception = new ConflictServiceException("message");
+
+        globalExceptionHandler.handleConflictServiceException(exception, response);
+
+        verify(response).sendError(HTTP_CONFLICT, exception.getMessage());
     }
 
 }
