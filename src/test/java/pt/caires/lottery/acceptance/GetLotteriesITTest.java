@@ -5,6 +5,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pt.caires.lottery.infrastructure.WrapperStorageLottery;
+import pt.caires.lottery.infrastructure.WrapperStorageLotteryPurchaseEvent;
 import pt.caires.lottery.infrastructure.entity.LotteryEntity;
 
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ class GetLotteriesITTest extends BaseIntegrationTest {
     @BeforeEach
     void setup() {
         WrapperStorageLottery.getLotteryStorage().clear();
+        WrapperStorageLotteryPurchaseEvent.getLotteryPurchaseEventsStorage().clear();
     }
 
     @Test

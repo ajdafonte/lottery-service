@@ -17,7 +17,7 @@ class LotteryTest {
     private static final List<Integer> TICKETS = List.of(123, 456);
 
     @Test
-    void require_id() {
+    void should_require_id() {
         Throwable throwable = catchThrowable(() -> new Lottery(null, NAME, DATE, FINISHED, TICKETS));
 
         assertThat(throwable)
@@ -27,7 +27,7 @@ class LotteryTest {
     }
 
     @Test
-    void require_name() {
+    void should_require_name() {
         Throwable throwable = catchThrowable(() -> new Lottery(ID, null, DATE, FINISHED, TICKETS));
 
         assertThat(throwable)
@@ -37,7 +37,7 @@ class LotteryTest {
     }
 
     @Test
-    void require_date() {
+    void should_require_date() {
         Throwable throwable = catchThrowable(() -> new Lottery(ID, NAME, null, FINISHED, TICKETS));
 
         assertThat(throwable)
@@ -47,13 +47,31 @@ class LotteryTest {
     }
 
     @Test
-    void requires_tickets() {
+    void should_requires_tickets() {
         Throwable throwable = catchThrowable(() -> new Lottery(ID, NAME, DATE, FINISHED, List.of()));
 
         assertThat(throwable)
                 .isNotNull()
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("At least one ticket is required");
+    }
+
+    @Test
+    void should_contain_all_tickets() {
+        Lottery lottery = new Lottery(ID, NAME, DATE, FINISHED, TICKETS);
+
+        boolean result = lottery.containsAllTickets(List.of(456));
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void should_not_contain_all_tickets() {
+        Lottery lottery = new Lottery(ID, NAME, DATE, FINISHED, TICKETS);
+
+        boolean result = lottery.containsAllTickets(List.of(111));
+
+        assertThat(result).isFalse();
     }
 
 }

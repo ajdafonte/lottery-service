@@ -67,5 +67,9 @@ public class Lottery {
         return winningTicket;
     }
 
+    public boolean containsAllTickets(List<Integer> tickets) {
+        return getTickets().containsAll(tickets);
+    }
+
 
 }

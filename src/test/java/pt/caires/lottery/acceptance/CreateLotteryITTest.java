@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import pt.caires.lottery.domain.shared.IdentifierGenerator;
 import pt.caires.lottery.domain.shared.Randomizer;
 import pt.caires.lottery.infrastructure.WrapperStorageLottery;
+import pt.caires.lottery.infrastructure.WrapperStorageLotteryPurchaseEvent;
 
 import java.net.HttpURLConnection;
 import java.util.List;
@@ -30,6 +31,7 @@ class CreateLotteryITTest extends BaseIntegrationTest {
     @BeforeEach
     void setup() {
         WrapperStorageLottery.getLotteryStorage().clear();
+        WrapperStorageLotteryPurchaseEvent.getLotteryPurchaseEventsStorage().clear();
     }
 
     @Test
