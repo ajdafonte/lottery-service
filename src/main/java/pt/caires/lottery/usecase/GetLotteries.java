@@ -1,22 +1,26 @@
 package pt.caires.lottery.usecase;
 
 import pt.caires.lottery.domain.Lottery;
+import pt.caires.lottery.domain.LotteryFinder;
 
 import javax.inject.Named;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Named
 public class GetLotteries {
 
+    private final LotteryFinder lotteryFinder;
+
+    public GetLotteries(LotteryFinder lotteryFinder) {
+        this.lotteryFinder = lotteryFinder;
+    }
+
     public List<Lottery> execute(LocalDate date) {
-        return List.of(
-                new Lottery(
-                        "e3211be6-d0cc-4718-905d-ab933cc91ecb",
-                        "Lottery 1",
-                        LocalDate.of(2021, 4, 25),
-                        false,
-                        List.of(1234567, 9876543)));
+        return Objects.isNull(date) ?
+               lotteryFinder.findAll() :
+               lotteryFinder.findAllBy(date);
     }
 
 }

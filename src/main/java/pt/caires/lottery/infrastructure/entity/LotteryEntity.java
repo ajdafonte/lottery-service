@@ -59,4 +59,8 @@ public class LotteryEntity {
         return winningTicket;
     }
 
+    public boolean hasSameDate(LocalDate localDate) {
+        return getDate().equals(localDate);
+    }
+
 }

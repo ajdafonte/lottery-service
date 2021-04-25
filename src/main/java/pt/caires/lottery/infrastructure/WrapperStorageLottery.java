@@ -3,7 +3,12 @@ package pt.caires.lottery.infrastructure;
 import pt.caires.lottery.infrastructure.entity.LotteryEntity;
 
 import javax.inject.Named;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
 
 @Named
 public class WrapperStorageLottery {
@@ -21,5 +26,20 @@ public class WrapperStorageLottery {
     public LotteryEntity selectBy(String id) {
         return LOTTERY_STORAGE.get(id);
     }
+
+    public Collection<LotteryEntity> selectAllBy(LocalDate date) {
+        return selectAll().stream()
+                .filter(byDate(date))
+                .collect(toList());
+    }
+
+    public Collection<LotteryEntity> selectAll() {
+        return LOTTERY_STORAGE.values();
+    }
+
+    private Predicate<LotteryEntity> byDate(LocalDate date) {
+        return lotteryEntity -> lotteryEntity.hasSameDate(date);
+    }
+
 
 }
