@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pt.caires.lottery.api.v1.dto.CreateLotteryV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteriesV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteryV1DTO;
+import pt.caires.lottery.api.v1.dto.PurchaseLotteryTicketsV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
 import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +34,7 @@ class LotteryV1ControllerTest {
     private static final boolean FINISHED = false;
     private static final Lottery LOTTERY = new Lottery(ID, NAME, DATE, FINISHED, TICKETS);
     private static final LotteryV1DTO LOTTERY_DTO = new LotteryV1DTO(ID, NAME, DATE, FINISHED, TICKETS);
+    private static final String USER_ID = "userId";
 
     @Mock
     private CreateLotteryV1DTOToLotteryMapper createLotteryV1DTOToLotteryMapper;
@@ -80,6 +83,15 @@ class LotteryV1ControllerTest {
         assertThat(result)
                 .isNotNull()
                 .isEqualTo(anExpectedLotteriesV1DTO());
+    }
+
+    @Test
+    void should_purchase_lottery_tickets() {
+        PurchaseLotteryTicketsV1DTO purchaseLotteryTicketsV1DTO = new PurchaseLotteryTicketsV1DTO(USER_ID, TICKETS);
+
+        Throwable throwable = catchThrowable(() -> lotteryV1Controller.purchaseLotteryTickets(ID, purchaseLotteryTicketsV1DTO));
+
+        assertThat(throwable).isNull();
     }
 
     private LotteriesV1DTO anExpectedLotteriesV1DTO() {

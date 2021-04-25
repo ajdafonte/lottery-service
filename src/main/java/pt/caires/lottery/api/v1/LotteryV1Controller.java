@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pt.caires.lottery.api.v1.dto.CreateLotteryV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteriesV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteryV1DTO;
+import pt.caires.lottery.api.v1.dto.PurchaseLotteryTicketsV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
 import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
@@ -55,6 +57,13 @@ public class LotteryV1Controller {
             @RequestParam(value = "date", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return lotteriesToLotteriesV1DTOMapper.map(getLotteries.execute(date));
+    }
+
+    @PostMapping(value = "/{id}/purchase", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void purchaseLotteryTickets(@PathVariable String id,
+                                       @RequestBody PurchaseLotteryTicketsV1DTO purchaseLotteryTicketsV1DTO) {
+        // TODO: 25/4/21 TBD - Call to usecase
     }
 
 }
