@@ -23,6 +23,13 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.rest-assured:rest-assured:4.3.3'
+	testImplementation 'io.rest-assured:json-path:4.3.3'
+	testImplementation 'io.rest-assured:xml-path:4.3.3'
+	testImplementation 'io.rest-assured:json-schema-validator:4.3.3'
+	testImplementation 'org.codehaus.groovy:groovy:3.0.7'
+	testImplementation 'org.codehaus.groovy:groovy-json:3.0.7'
+	testImplementation 'org.codehaus.groovy:groovy-xml:3.0.7'
 }
 
 test {
