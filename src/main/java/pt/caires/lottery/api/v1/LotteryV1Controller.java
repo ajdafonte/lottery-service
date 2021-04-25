@@ -18,8 +18,10 @@ import pt.caires.lottery.api.v1.dto.PurchaseLotteryV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
 import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
+import pt.caires.lottery.api.v1.mapper.PurchaseLotteryV1DTOToLotteryPurchaseEventMapper;
 import pt.caires.lottery.usecase.CreateLottery;
 import pt.caires.lottery.usecase.GetLotteries;
+import pt.caires.lottery.usecase.PurchaseLotteryTickets;
 
 import java.time.LocalDate;
 
@@ -32,17 +34,23 @@ public class LotteryV1Controller {
     private final LotteryToLotteryV1DTOMapper lotteryToLotteryV1DTOMapper;
     private final GetLotteries getLotteries;
     private final LotteriesToLotteriesV1DTOMapper lotteriesToLotteriesV1DTOMapper;
+    private final PurchaseLotteryTickets purchaseLotteryTickets;
+    private final PurchaseLotteryV1DTOToLotteryPurchaseEventMapper purchaseLotteryV1DTOToLotteryPurchaseEventMapper;
 
     public LotteryV1Controller(CreateLotteryV1DTOToLotteryMapper createLotteryV1DTOToLotteryMapper,
                                CreateLottery createLottery,
                                LotteryToLotteryV1DTOMapper lotteryToLotteryV1DTOMapper,
                                GetLotteries getLotteries,
-                               LotteriesToLotteriesV1DTOMapper lotteriesToLotteriesV1DTOMapper) {
+                               LotteriesToLotteriesV1DTOMapper lotteriesToLotteriesV1DTOMapper,
+                               PurchaseLotteryTickets purchaseLotteryTickets,
+                               PurchaseLotteryV1DTOToLotteryPurchaseEventMapper purchaseLotteryV1DTOToLotteryPurchaseEventMapper) {
         this.createLotteryV1DTOToLotteryMapper = createLotteryV1DTOToLotteryMapper;
         this.createLottery = createLottery;
         this.lotteryToLotteryV1DTOMapper = lotteryToLotteryV1DTOMapper;
         this.getLotteries = getLotteries;
         this.lotteriesToLotteriesV1DTOMapper = lotteriesToLotteriesV1DTOMapper;
+        this.purchaseLotteryTickets = purchaseLotteryTickets;
+        this.purchaseLotteryV1DTOToLotteryPurchaseEventMapper = purchaseLotteryV1DTOToLotteryPurchaseEventMapper;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -63,7 +71,7 @@ public class LotteryV1Controller {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void purchaseLotteryTickets(@PathVariable String id,
                                        @RequestBody PurchaseLotteryV1DTO purchaseLotteryV1DTO) {
-        // TODO: 25/4/21 TBD - Call to usecase
+        purchaseLotteryTickets.execute(purchaseLotteryV1DTOToLotteryPurchaseEventMapper.map(id, purchaseLotteryV1DTO));
     }
 
 }

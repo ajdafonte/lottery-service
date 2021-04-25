@@ -12,16 +12,20 @@ import pt.caires.lottery.api.v1.dto.PurchaseLotteryV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
 import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
+import pt.caires.lottery.api.v1.mapper.PurchaseLotteryV1DTOToLotteryPurchaseEventMapper;
 import pt.caires.lottery.domain.Lottery;
+import pt.caires.lottery.domain.LotteryPurchaseEvent;
 import pt.caires.lottery.usecase.CreateLottery;
 import pt.caires.lottery.usecase.GetLotteries;
+import pt.caires.lottery.usecase.PurchaseLotteryTickets;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class LotteryV1ControllerTest {
@@ -35,6 +39,7 @@ class LotteryV1ControllerTest {
     private static final Lottery LOTTERY = new Lottery(ID, NAME, DATE, FINISHED, TICKETS);
     private static final LotteryV1DTO LOTTERY_DTO = new LotteryV1DTO(ID, NAME, DATE, FINISHED, TICKETS);
     private static final String USER_ID = "userId";
+    private static final LocalDateTime OCCURRED_AT = LocalDateTime.of(2021, 4, 25, 17, 0, 0);
 
     @Mock
     private CreateLotteryV1DTOToLotteryMapper createLotteryV1DTOToLotteryMapper;
@@ -46,6 +51,10 @@ class LotteryV1ControllerTest {
     private GetLotteries getLotteries;
     @Mock
     private LotteriesToLotteriesV1DTOMapper lotteriesToLotteriesV1DTOMapper;
+    @Mock
+    private PurchaseLotteryTickets purchaseLotteryTickets;
+    @Mock
+    private PurchaseLotteryV1DTOToLotteryPurchaseEventMapper purchaseLotteryV1DTOToLotteryPurchaseEventMapper;
 
     private LotteryV1Controller lotteryV1Controller;
 
@@ -56,7 +65,9 @@ class LotteryV1ControllerTest {
                 createLottery,
                 lotteryToLotteryV1DTOMapper,
                 getLotteries,
-                lotteriesToLotteriesV1DTOMapper);
+                lotteriesToLotteriesV1DTOMapper,
+                purchaseLotteryTickets,
+                purchaseLotteryV1DTOToLotteryPurchaseEventMapper);
     }
 
     @Test
@@ -88,10 +99,12 @@ class LotteryV1ControllerTest {
     @Test
     void should_purchase_lottery_tickets() {
         PurchaseLotteryV1DTO purchaseLotteryV1DTO = new PurchaseLotteryV1DTO(USER_ID, TICKETS);
+        LotteryPurchaseEvent lotteryPurchaseEvent = new LotteryPurchaseEvent(ID, USER_ID, TICKETS, OCCURRED_AT);
+        given(purchaseLotteryV1DTOToLotteryPurchaseEventMapper.map(ID, purchaseLotteryV1DTO)).willReturn(lotteryPurchaseEvent);
 
-        Throwable throwable = catchThrowable(() -> lotteryV1Controller.purchaseLotteryTickets(ID, purchaseLotteryV1DTO));
+        lotteryV1Controller.purchaseLotteryTickets(ID, purchaseLotteryV1DTO);
 
-        assertThat(throwable).isNull();
+        verify(purchaseLotteryTickets).execute(lotteryPurchaseEvent);
     }
 
     private LotteriesV1DTO anExpectedLotteriesV1DTO() {
