@@ -1,0 +1,59 @@
+package pt.caires.lottery.domain;
+
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
+class LotteryTest {
+
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final LocalDate DATE = LocalDate.of(2021, 4, 25);
+    private static final boolean FINISHED = false;
+    private static final List<Integer> TICKETS = List.of(123, 456);
+
+    @Test
+    void require_id() {
+        Throwable throwable = catchThrowable(() -> new Lottery(null, NAME, DATE, FINISHED, TICKETS));
+
+        assertThat(throwable)
+                .isNotNull()
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Id is required");
+    }
+
+    @Test
+    void require_name() {
+        Throwable throwable = catchThrowable(() -> new Lottery(ID, null, DATE, FINISHED, TICKETS));
+
+        assertThat(throwable)
+                .isNotNull()
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Name is required");
+    }
+
+    @Test
+    void require_date() {
+        Throwable throwable = catchThrowable(() -> new Lottery(ID, NAME, null, FINISHED, TICKETS));
+
+        assertThat(throwable)
+                .isNotNull()
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Date is required");
+    }
+
+    @Test
+    void requires_tickets() {
+        Throwable throwable = catchThrowable(() -> new Lottery(ID, NAME, DATE, FINISHED, List.of()));
+
+        assertThat(throwable)
+                .isNotNull()
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("At least one ticket is required");
+    }
+
+}
