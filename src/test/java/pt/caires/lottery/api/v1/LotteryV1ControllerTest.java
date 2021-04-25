@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pt.caires.lottery.api.v1.dto.CreateLotteryV1DTO;
+import pt.caires.lottery.api.v1.dto.LotteriesV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteryV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
@@ -21,22 +22,14 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class LotteryV1ControllerTest {
 
-    private static final CreateLotteryV1DTO CREATE_LOTTERY_DTO = new CreateLotteryV1DTO(
-            "Lottery 1",
-            LocalDate.of(2021, 4, 25),
-            2);
-    private static final Lottery LOTTERY = new Lottery(
-            "id",
-            "name",
-            LocalDate.of(2021, 4, 25),
-            false,
-            List.of(123, 456));
-    private static final LotteryV1DTO LOTTERY_DTO = new LotteryV1DTO(
-            "id",
-            "name",
-            LocalDate.of(2021, 4, 25),
-            false,
-            List.of(123, 456));
+    private static final String ID = "id";
+    private static final LocalDate DATE = LocalDate.of(2021, 4, 25);
+    private static final CreateLotteryV1DTO CREATE_LOTTERY_DTO = new CreateLotteryV1DTO(ID, DATE, 2);
+    private static final String NAME = "name";
+    private static final List<Integer> TICKETS = List.of(123, 456);
+    private static final boolean FINISHED = false;
+    private static final Lottery LOTTERY = new Lottery(ID, NAME, DATE, FINISHED, TICKETS);
+    private static final LotteryV1DTO LOTTERY_DTO = new LotteryV1DTO(ID, NAME, DATE, FINISHED, TICKETS);
 
     @Mock
     private CreateLotteryV1DTOToLotteryMapper createLotteryV1DTOToLotteryMapper;
@@ -68,13 +61,32 @@ class LotteryV1ControllerTest {
                 .isEqualTo(anExpectedLotteryV1DTO());
     }
 
+    @Test
+    void should_retrieve_lotteries() {
+        LotteriesV1DTO result = lotteryV1Controller.getLotteriesBy(DATE);
+
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(anExpectedLotteriesV1DTO());
+    }
+
+    private LotteriesV1DTO anExpectedLotteriesV1DTO() {
+        return new LotteriesV1DTO(List.of(
+                new LotteryV1DTO(
+                        "e3211be6-d0cc-4718-905d-ab933cc91ecb",
+                        "Lottery 1",
+                        LocalDate.of(2021, 4, 25),
+                        false,
+                        List.of(1234567, 9876543))));
+    }
+
     private LotteryV1DTO anExpectedLotteryV1DTO() {
         return new LotteryV1DTO(
-                "id",
-                "name",
-                LocalDate.of(2021, 4, 25),
-                false,
-                List.of(123, 456));
+                ID,
+                NAME,
+                DATE,
+                FINISHED,
+                TICKETS);
     }
 
 }
