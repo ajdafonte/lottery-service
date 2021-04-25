@@ -9,9 +9,11 @@ import pt.caires.lottery.api.v1.dto.CreateLotteryV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteriesV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteryV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
+import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
 import pt.caires.lottery.domain.Lottery;
 import pt.caires.lottery.usecase.CreateLottery;
+import pt.caires.lottery.usecase.GetLotteries;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,6 +39,10 @@ class LotteryV1ControllerTest {
     private CreateLottery createLottery;
     @Mock
     private LotteryToLotteryV1DTOMapper lotteryToLotteryV1DTOMapper;
+    @Mock
+    private GetLotteries getLotteries;
+    @Mock
+    private LotteriesToLotteriesV1DTOMapper lotteriesToLotteriesV1DTOMapper;
 
     private LotteryV1Controller lotteryV1Controller;
 
@@ -45,7 +51,9 @@ class LotteryV1ControllerTest {
         this.lotteryV1Controller = new LotteryV1Controller(
                 createLotteryV1DTOToLotteryMapper,
                 createLottery,
-                lotteryToLotteryV1DTOMapper);
+                lotteryToLotteryV1DTOMapper,
+                getLotteries,
+                lotteriesToLotteriesV1DTOMapper);
     }
 
     @Test
@@ -63,6 +71,10 @@ class LotteryV1ControllerTest {
 
     @Test
     void should_retrieve_lotteries() {
+        List<Lottery> lotteries = List.of(LOTTERY);
+        given(getLotteries.execute(DATE)).willReturn(lotteries);
+        given(lotteriesToLotteriesV1DTOMapper.map(lotteries)).willReturn(new LotteriesV1DTO(List.of(LOTTERY_DTO)));
+
         LotteriesV1DTO result = lotteryV1Controller.getLotteriesBy(DATE);
 
         assertThat(result)
@@ -71,22 +83,16 @@ class LotteryV1ControllerTest {
     }
 
     private LotteriesV1DTO anExpectedLotteriesV1DTO() {
-        return new LotteriesV1DTO(List.of(
-                new LotteryV1DTO(
-                        "e3211be6-d0cc-4718-905d-ab933cc91ecb",
-                        "Lottery 1",
-                        LocalDate.of(2021, 4, 25),
-                        false,
-                        List.of(1234567, 9876543))));
+        return new LotteriesV1DTO(List.of(anExpectedLotteryV1DTO()));
     }
 
     private LotteryV1DTO anExpectedLotteryV1DTO() {
         return new LotteryV1DTO(
-                ID,
-                NAME,
-                DATE,
-                FINISHED,
-                TICKETS);
+                "id",
+                "name",
+                LocalDate.of(2021, 4, 25),
+                false,
+                List.of(123, 456));
     }
 
 }

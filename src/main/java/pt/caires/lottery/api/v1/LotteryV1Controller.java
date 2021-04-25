@@ -14,11 +14,12 @@ import pt.caires.lottery.api.v1.dto.CreateLotteryV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteriesV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteryV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
+import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
 import pt.caires.lottery.usecase.CreateLottery;
+import pt.caires.lottery.usecase.GetLotteries;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "v1/lotteries", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -27,13 +28,19 @@ public class LotteryV1Controller {
     private final CreateLotteryV1DTOToLotteryMapper createLotteryV1DTOToLotteryMapper;
     private final CreateLottery createLottery;
     private final LotteryToLotteryV1DTOMapper lotteryToLotteryV1DTOMapper;
+    private final GetLotteries getLotteries;
+    private final LotteriesToLotteriesV1DTOMapper lotteriesToLotteriesV1DTOMapper;
 
     public LotteryV1Controller(CreateLotteryV1DTOToLotteryMapper createLotteryV1DTOToLotteryMapper,
                                CreateLottery createLottery,
-                               LotteryToLotteryV1DTOMapper lotteryToLotteryV1DTOMapper) {
+                               LotteryToLotteryV1DTOMapper lotteryToLotteryV1DTOMapper,
+                               GetLotteries getLotteries,
+                               LotteriesToLotteriesV1DTOMapper lotteriesToLotteriesV1DTOMapper) {
         this.createLotteryV1DTOToLotteryMapper = createLotteryV1DTOToLotteryMapper;
         this.createLottery = createLottery;
         this.lotteryToLotteryV1DTOMapper = lotteryToLotteryV1DTOMapper;
+        this.getLotteries = getLotteries;
+        this.lotteriesToLotteriesV1DTOMapper = lotteriesToLotteriesV1DTOMapper;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -47,13 +54,7 @@ public class LotteryV1Controller {
     public LotteriesV1DTO getLotteriesBy(
             @RequestParam(value = "date", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return new LotteriesV1DTO(List.of(
-                new LotteryV1DTO(
-                        "e3211be6-d0cc-4718-905d-ab933cc91ecb",
-                        "Lottery 1",
-                        LocalDate.of(2021, 4, 25),
-                        false,
-                        List.of(1234567, 9876543))));
+        return lotteriesToLotteriesV1DTOMapper.map(getLotteries.execute(date));
     }
 
 }
