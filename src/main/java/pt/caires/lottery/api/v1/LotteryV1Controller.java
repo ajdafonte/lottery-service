@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pt.caires.lottery.api.v1.dto.CreateLotteryV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteriesV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteryV1DTO;
-import pt.caires.lottery.api.v1.dto.PurchaseLotteryTicketsV1DTO;
+import pt.caires.lottery.api.v1.dto.PurchaseLotteryV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
 import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
@@ -62,7 +62,7 @@ public class LotteryV1Controller {
     @PostMapping(value = "/{id}/purchase", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void purchaseLotteryTickets(@PathVariable String id,
-                                       @RequestBody PurchaseLotteryTicketsV1DTO purchaseLotteryTicketsV1DTO) {
+                                       @RequestBody PurchaseLotteryV1DTO purchaseLotteryV1DTO) {
         // TODO: 25/4/21 TBD - Call to usecase
     }
 

@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pt.caires.lottery.api.v1.dto.CreateLotteryV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteriesV1DTO;
 import pt.caires.lottery.api.v1.dto.LotteryV1DTO;
-import pt.caires.lottery.api.v1.dto.PurchaseLotteryTicketsV1DTO;
+import pt.caires.lottery.api.v1.dto.PurchaseLotteryV1DTO;
 import pt.caires.lottery.api.v1.mapper.CreateLotteryV1DTOToLotteryMapper;
 import pt.caires.lottery.api.v1.mapper.LotteriesToLotteriesV1DTOMapper;
 import pt.caires.lottery.api.v1.mapper.LotteryToLotteryV1DTOMapper;
@@ -87,9 +87,9 @@ class LotteryV1ControllerTest {
 
     @Test
     void should_purchase_lottery_tickets() {
-        PurchaseLotteryTicketsV1DTO purchaseLotteryTicketsV1DTO = new PurchaseLotteryTicketsV1DTO(USER_ID, TICKETS);
+        PurchaseLotteryV1DTO purchaseLotteryV1DTO = new PurchaseLotteryV1DTO(USER_ID, TICKETS);
 
-        Throwable throwable = catchThrowable(() -> lotteryV1Controller.purchaseLotteryTickets(ID, purchaseLotteryTicketsV1DTO));
+        Throwable throwable = catchThrowable(() -> lotteryV1Controller.purchaseLotteryTickets(ID, purchaseLotteryV1DTO));
 
         assertThat(throwable).isNull();
     }

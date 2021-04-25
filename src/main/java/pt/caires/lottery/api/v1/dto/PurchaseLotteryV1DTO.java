@@ -7,12 +7,12 @@ import java.util.List;
 
 @EqualsAndHashCode
 @ToString
-public class PurchaseLotteryTicketsV1DTO {
+public class PurchaseLotteryV1DTO {
 
     private final String userId;
     private final List<Integer> tickets;
 
-    public PurchaseLotteryTicketsV1DTO(String userId, List<Integer> tickets) {
+    public PurchaseLotteryV1DTO(String userId, List<Integer> tickets) {
         this.userId = userId;
         this.tickets = tickets;
     }
