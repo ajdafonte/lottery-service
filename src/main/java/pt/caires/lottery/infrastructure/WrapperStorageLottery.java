@@ -10,6 +10,10 @@ public class WrapperStorageLottery {
 
     private static ConcurrentHashMap<String, LotteryEntity> LOTTERY_STORAGE = new ConcurrentHashMap<>();
 
+    public static ConcurrentHashMap<String, LotteryEntity> getLotteryStorage() {
+        return LOTTERY_STORAGE;
+    }
+
     public void insert(LotteryEntity lotteryEntity) {
         LOTTERY_STORAGE.put(lotteryEntity.getId(), lotteryEntity);
     }

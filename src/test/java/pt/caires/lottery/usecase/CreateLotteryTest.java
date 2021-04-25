@@ -2,29 +2,40 @@ package pt.caires.lottery.usecase;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pt.caires.lottery.domain.Lottery;
+import pt.caires.lottery.domain.LotteryRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class CreateLotteryTest {
+
+    @Mock
+    private LotteryRepository lotteryRepository;
 
     private CreateLottery createLottery;
 
     @BeforeEach
     void setUp() {
-        this.createLottery = new CreateLottery();
+        this.createLottery = new CreateLottery(lotteryRepository);
     }
 
     @Test
     void should_create_a_lottery() {
-        Lottery lottery = new Lottery("e3211be6-d0cc-4718-905d-ab933cc91ecb",
-                "Lottery 1",
+        Lottery lottery = new Lottery(
+                "id",
+                "name",
                 LocalDate.of(2021, 4, 25),
                 false,
-                List.of(1234567, 9876543));
+                List.of(123, 456));
+        given(lotteryRepository.save(lottery)).willReturn(lottery);
 
         Lottery result = createLottery.execute(lottery);
 
@@ -34,11 +45,12 @@ class CreateLotteryTest {
     }
 
     private Lottery anExpectedLottery() {
-        return new Lottery("e3211be6-d0cc-4718-905d-ab933cc91ecb",
-                "Lottery 1",
+        return new Lottery(
+                "id",
+                "name",
                 LocalDate.of(2021, 4, 25),
                 false,
-                List.of(1234567, 9876543));
+                List.of(123, 456));
     }
 
 }
