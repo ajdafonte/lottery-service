@@ -1,5 +1,6 @@
 package pt.caires.lottery.api.v1.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -15,6 +16,8 @@ public class LotteryV1DTO {
     private final LocalDate date;
     private final boolean finished;
     private final List<Integer> tickets;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer winningTicket;
 
     public LotteryV1DTO(String id, String name, LocalDate date, boolean finished, List<Integer> tickets) {
         this.id = id;
@@ -22,6 +25,16 @@ public class LotteryV1DTO {
         this.date = date;
         this.finished = finished;
         this.tickets = tickets;
+    }
+
+    public LotteryV1DTO(String id,
+                        String name,
+                        LocalDate date,
+                        boolean finished,
+                        List<Integer> tickets,
+                        Integer winningTicket) {
+        this(id, name, date, finished, tickets);
+        this.winningTicket = winningTicket;
     }
 
     public String getId() {
@@ -44,4 +57,7 @@ public class LotteryV1DTO {
         return tickets;
     }
 
+    public Integer getWinningTicket() {
+        return winningTicket;
+    }
 }

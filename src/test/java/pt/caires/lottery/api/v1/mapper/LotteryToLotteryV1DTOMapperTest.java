@@ -26,7 +26,8 @@ class LotteryToLotteryV1DTOMapperTest {
                 "name",
                 LocalDate.of(2021, 4, 25),
                 false,
-                List.of(123, 456));
+                List.of(123, 456),
+                123);
 
         LotteryV1DTO result = lotteryToLotteryV1DTOMapper.map(lottery);
 
@@ -42,7 +43,8 @@ class LotteryToLotteryV1DTOMapperTest {
                 "name",
                 LocalDate.of(2021, 4, 25),
                 false,
-                List.of(123, 456));
+                List.of(123, 456),
+                123);
     }
 
 }

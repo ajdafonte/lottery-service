@@ -14,7 +14,8 @@ public class LotteryEntityToLotteryMapper {
                 lotteryEntity.getName(),
                 lotteryEntity.getDate(),
                 lotteryEntity.isFinished(),
-                lotteryEntity.getTickets());
+                lotteryEntity.getTickets(),
+                lotteryEntity.getWinningTicket());
     }
 
 }

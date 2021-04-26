@@ -30,8 +30,9 @@ class GetLotteriesITTest extends BaseIntegrationTest {
             ID_2,
             "Lottery 2",
             LocalDate.of(2021, 4, 26),
-            false,
-            List.of(67890, 45678));
+            true,
+            List.of(67890, 45678),
+            67890);
 
     @BeforeEach
     void setup() {

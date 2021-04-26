@@ -14,7 +14,8 @@ public class LotteryToLotteryV1DTOMapper {
                 lottery.getName(),
                 lottery.getDate(),
                 lottery.isFinished(),
-                lottery.getTickets());
+                lottery.getTickets(),
+                lottery.getWinningTicket());
     }
 
 }

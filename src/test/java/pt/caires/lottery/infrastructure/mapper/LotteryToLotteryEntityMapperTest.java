@@ -26,7 +26,8 @@ class LotteryToLotteryEntityMapperTest {
                 "name",
                 LocalDate.of(2021, 4, 25),
                 false,
-                List.of(123, 456));
+                List.of(123, 456),
+                123);
 
         LotteryEntity result = lotteryToLotteryEntityMapper.map(lottery);
 
@@ -41,7 +42,8 @@ class LotteryToLotteryEntityMapperTest {
                 "name",
                 LocalDate.of(2021, 4, 25),
                 false,
-                List.of(123, 456));
+                List.of(123, 456),
+                123);
     }
 
 }
