@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "80fe3b68-3b3d-47e7-af07-319234436ec5",
+		"name": "LOTTERY SERVICE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a Lottery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Lottery 1\",\n    \"date\": \"2021-04-26\",\n    \"numberTickets\": 10\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/lotteries",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"lotteries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase Lottery Tickets",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": \"myId\",\n    \"tickets\": [1332044270]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/lotteries/:id/purchase",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"lotteries",
+						":id",
+						"purchase"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "8f3f134a-e4c7-4d29-aa0d-743c174a35a5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve All Lotteries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/lotteries",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"lotteries"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2021-04-26",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
