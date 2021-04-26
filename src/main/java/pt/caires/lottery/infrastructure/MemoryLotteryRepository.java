@@ -18,20 +18,20 @@ public class MemoryLotteryRepository implements LotteryRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(MemoryLotteryRepository.class);
 
     private final WrapperStorageLottery wrapperStorageLottery;
-    private final LotteryToLotteryEntityMapper chargingSessionToLotteryEntityMapper;
-    private final LotteryEntityToLotteryMapper chargingSessionEntityToLotteryMapper;
+    private final LotteryToLotteryEntityMapper lotteryToLotteryEntityMapper;
+    private final LotteryEntityToLotteryMapper lotteryEntityToLotteryMapper;
 
     public MemoryLotteryRepository(WrapperStorageLottery wrapperStorageLottery,
-                                   LotteryToLotteryEntityMapper chargingSessionToLotteryEntityMapper,
-                                   LotteryEntityToLotteryMapper chargingSessionEntityToLotteryMapper) {
+                                   LotteryToLotteryEntityMapper lotteryToLotteryEntityMapper,
+                                   LotteryEntityToLotteryMapper lotteryEntityToLotteryMapper) {
         this.wrapperStorageLottery = wrapperStorageLottery;
-        this.chargingSessionToLotteryEntityMapper = chargingSessionToLotteryEntityMapper;
-        this.chargingSessionEntityToLotteryMapper = chargingSessionEntityToLotteryMapper;
+        this.lotteryToLotteryEntityMapper = lotteryToLotteryEntityMapper;
+        this.lotteryEntityToLotteryMapper = lotteryEntityToLotteryMapper;
     }
 
     @Override
     public Lottery save(Lottery lottery) {
-        LotteryEntity lotteryEntity = chargingSessionToLotteryEntityMapper.map(lottery);
+        LotteryEntity lotteryEntity = lotteryToLotteryEntityMapper.map(lottery);
 
         wrapperStorageLottery.insert(lotteryEntity);
 
@@ -44,7 +44,7 @@ public class MemoryLotteryRepository implements LotteryRepository {
     }
 
     private Function<LotteryEntity, Lottery> toLottery() {
-        return chargingSessionEntityToLotteryMapper::map;
+        return lotteryEntityToLotteryMapper::map;
     }
 
 }
