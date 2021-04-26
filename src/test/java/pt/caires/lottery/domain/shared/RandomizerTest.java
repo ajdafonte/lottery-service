@@ -26,4 +26,11 @@ class RandomizerTest {
                 .allMatch(value -> value > 0);
     }
 
+    @Test
+    void should_retrieve_a_random_element() {
+        int result = randomizer.getElementFrom(List.of(1, 2, 3));
+
+        assertThat(result).isIn(1, 2, 3);
+    }
+
 }

@@ -16,4 +16,10 @@ public class Randomizer {
                 .collect(toList());
     }
 
+    public int getElementFrom(List<Integer> elements) {
+        int numElements = elements.size();
+        int randomElementIdx = ThreadLocalRandom.current().nextInt(numElements) % numElements;
+        return elements.get(randomElementIdx);
+    }
+
 }
