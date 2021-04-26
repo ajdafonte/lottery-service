@@ -1,5 +1,7 @@
 package pt.caires.lottery.usecase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pt.caires.lottery.domain.Lottery;
 import pt.caires.lottery.domain.LotteryFinder;
 import pt.caires.lottery.domain.LotteryPurchaseEvent;
@@ -13,6 +15,8 @@ import java.util.function.Consumer;
 
 @Named
 public class PurchaseLotteryTickets {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PurchaseLotteryTickets.class);
 
     private final LotteryFinder lotteryFinder;
     private final LotteryPurchaseEventRepository lotteryPurchaseEventRepository;
@@ -30,6 +34,9 @@ public class PurchaseLotteryTickets {
 
     private Consumer<Lottery> validateAndSaveLotteryPurchaseEvent(LotteryPurchaseEvent lotteryPurchaseEvent) {
         return lottery -> {
+            LOGGER.info("Validate if user <{}> can purchase tickets <{}> for lottery <{}>",
+                    lotteryPurchaseEvent.getUserId(), lotteryPurchaseEvent.getTickets(), lotteryPurchaseEvent.getLotteryId());
+
             checkIfLotteryIsFinished(lottery);
             checkIfLotteryContainsAllTickets(lottery, lotteryPurchaseEvent);
 

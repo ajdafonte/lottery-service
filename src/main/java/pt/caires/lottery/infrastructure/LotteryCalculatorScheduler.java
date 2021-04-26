@@ -25,9 +25,13 @@ public class LotteryCalculatorScheduler {
     @Scheduled(cron = "0 0 0 * * *")
     public void calculateLotteriesWinner() {
         LOGGER.info("Start to calculate Lotteries winner");
-        LocalDate date = clock.now().minusDays(1).toLocalDate();
+        LocalDate date = getYesterday();
         calculateLotteriesWinner.execute(date);
         LOGGER.info("Finish to calculate Lotteries winner");
+    }
+
+    private LocalDate getYesterday() {
+        return clock.now().minusDays(1).toLocalDate();
     }
 
 }

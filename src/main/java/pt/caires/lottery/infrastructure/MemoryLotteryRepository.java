@@ -1,5 +1,7 @@
 package pt.caires.lottery.infrastructure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pt.caires.lottery.domain.Lottery;
 import pt.caires.lottery.domain.LotteryRepository;
 import pt.caires.lottery.domain.exception.ConflictServiceException;
@@ -12,6 +14,8 @@ import java.util.function.Function;
 
 @Named
 public class MemoryLotteryRepository implements LotteryRepository {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemoryLotteryRepository.class);
 
     private final WrapperStorageLottery wrapperStorageLottery;
     private final LotteryToLotteryEntityMapper chargingSessionToLotteryEntityMapper;
@@ -35,6 +39,7 @@ public class MemoryLotteryRepository implements LotteryRepository {
                 .map(toLottery())
                 .orElseThrow(() -> new ConflictServiceException("A conflict has occurred when saving the Lottery"));
 
+        LOGGER.info("Saved Lottery <{}>", savedLottery);
         return savedLottery;
     }
 

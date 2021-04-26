@@ -1,5 +1,7 @@
 package pt.caires.lottery.infrastructure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pt.caires.lottery.domain.Lottery;
 import pt.caires.lottery.domain.LotteryFinder;
 import pt.caires.lottery.infrastructure.entity.LotteryEntity;
@@ -16,6 +18,8 @@ import static java.util.stream.Collectors.toList;
 @Named
 public class MemoryLotteryFinder implements LotteryFinder {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemoryLotteryFinder.class);
+
     private final WrapperStorageLottery wrapperStorageLottery;
     private final LotteryEntityToLotteryMapper lotteryEntityToLotteryMapper;
 
@@ -27,20 +31,27 @@ public class MemoryLotteryFinder implements LotteryFinder {
 
     @Override
     public List<Lottery> findAll() {
-        return wrapperStorageLottery.selectAll().stream()
+        List<Lottery> lotteries = wrapperStorageLottery.selectAll().stream()
                 .map(toLottery())
                 .collect(toList());
+
+        LOGGER.info("Found all Lotteries with a total of <{}>", lotteries.size());
+        return lotteries;
     }
 
     @Override
     public List<Lottery> findAllBy(LocalDate date) {
-        return wrapperStorageLottery.selectAllBy(date).stream()
+        List<Lottery> lotteries = wrapperStorageLottery.selectAllBy(date).stream()
                 .map(toLottery())
                 .collect(toList());
+
+        LOGGER.info("Found a total of <{}> Lotteries for date <{}>", lotteries.size(), date);
+        return lotteries;
     }
 
     @Override
     public Optional<Lottery> findBy(String id) {
+        LOGGER.info("Find Lottery with id <{}>", id);
         return wrapperStorageLottery.selectBy(id).map(toLottery());
     }
 

@@ -36,9 +36,10 @@ public class CalculateLotteriesWinner {
     private Consumer<Lottery> checkAndCalculateLotteryWinner() {
         return lottery -> {
             if (lottery.isFinished()) {
-                LOGGER.info("Lottery <%s> is already finished, hence no wiiner to calculate");
+                LOGGER.info("Lottery <{}> is already finished, hence no winner to calculate", lottery.getId());
             } else {
                 int winningTicket = randomizer.getElementFrom(lottery.getTickets());
+                LOGGER.info("Lottery <{}> has the following winning ticket <{}>", lottery.getId(), winningTicket);
                 Lottery finishedLottery = new Lottery(
                         lottery.getId(),
                         lottery.getName(),
